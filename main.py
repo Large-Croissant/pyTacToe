@@ -29,7 +29,13 @@ def win_check(gamestate: Gamestate) -> None | str:
         return gamestate.boxes[0][0].text()
     if gamestate.boxes[0][2].text() == gamestate.boxes[1][1].text() == gamestate.boxes[2][0].text() != "":
         return gamestate.boxes[0][2].text()
-    return None
+
+    for row in gamestate.boxes:
+        for box in row:
+            if box.text() == "":
+                return None
+
+    return "tie"
 
 
 def reset(gamestate: Gamestate):
@@ -49,7 +55,10 @@ def do_turn(gamestate: Gamestate, r, c):
         gamestate.top_label.setText(f"Current Turn: {gamestate.current_turn}")
         winner = win_check(gamestate)
         if winner is not None:
-            gamestate.top_label.setText(f"WINNER: {winner}\nCONGRADULATIONS!")
+            if winner == "tie":
+                gamestate.top_label.setText("Tie Game :/")
+            else:
+                gamestate.top_label.setText(f"WINNER: {winner}")
             boxes_enabled(gamestate, False)
 
 
